@@ -9,7 +9,7 @@ def main(url):
         answer = client.from_url(url)
     else:
         answer = client.answer(url)
-    filename = "%s_%s_%s" % (answer.author.name, answer.id, answer.voteup_count)
+    filename = "%s_%s_voteup%s" % (answer.author.name, answer.id, answer.voteup_count)
     answer.save(answer.question.title, filename)
 
 

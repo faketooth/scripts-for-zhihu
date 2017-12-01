@@ -32,6 +32,7 @@ def main(question_id):
             answer.save(question.title, filename)
         except GetDataErrorException:
             client.login()
+            answer.save(question.title, filename)
         cache_file.write("%s\n" % answer.id)
         cache_file.flush()
         answer_cache.add(answer.id)

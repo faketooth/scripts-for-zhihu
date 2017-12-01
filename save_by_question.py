@@ -35,8 +35,8 @@ def main(question_id):
         cache_file.write("%s\n" % answer.id)
         cache_file.flush()
         answer_cache.add(answer.id)
-        sleep_time = random.randint(1, 3)
-        time.sleep(sleep_time)
+        # sleep_time = random.randint(1, 3)
+        time.sleep(1)
     cache_file.close()
 
 

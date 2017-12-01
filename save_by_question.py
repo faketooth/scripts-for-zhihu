@@ -13,7 +13,11 @@ def main(question_id):
         if answer.id in answer_cache:
             continue
         print(answer.author.name, answer.voteup_count)
-        answer.save(question.title)
+        filename = "%s_%s" % (answer.author.name, answer.id)
+        try:
+            answer.save(question.title, filename)
+        except GetDataErrorException:
+            client.login()
         answer_cache.add(answer.id)
         sleep_time = random.randint(1, 3)
         time.sleep(sleep_time)

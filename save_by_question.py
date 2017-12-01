@@ -8,9 +8,13 @@ def main(question_id):
     question = client.question(int(question_id))
     print("start to save answers of {}".format(question.title.encode('utf-8')))
 
+    answer_cache = set()
     for answer in question.answers:
+        if answer.id in answer_cache:
+            continue
         print(answer.author.name, answer.voteup_count)
         answer.save(question.title)
+        answer_cache.add(answer.id)
         sleep_time = random.randint(1, 3)
         time.sleep(sleep_time)
 

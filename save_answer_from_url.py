@@ -4,14 +4,26 @@ import sys
 import time
 import random
 
-def main(url):
-    if url[:4] == 'http':
-        answer = client.from_url(url)
-    else:
-        answer = client.answer(url)
+
+def save_answer(url):
+    answer = client.from_url(url)
     filename = "%s_%s_voteup%s" % (answer.author.name, answer.id, answer.voteup_count)
     answer.save(answer.question.title, filename)
 
+
+def save_article(url):
+    aid = url.split("/")[-1]
+    article = client.article(int(aid))
+    article.save()
+
+
+def main(url):
+    if 'question' in url:
+        save_answer(url)
+    elif 'zhuanlan' in url:
+        save_article(url)
+    else:
+        print("can't recongize url: %s" % url)
 
 
 if __name__ == '__main__':

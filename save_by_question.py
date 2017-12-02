@@ -1,5 +1,6 @@
 from __future__ import print_function
 from zhihu_oauth import ZhihuClient
+from zhihu_oauth.exception import GetDataErrorException
 import sys
 import time
 import random
@@ -21,6 +22,8 @@ def main(question_id):
 
     answer_cache = get_cache(question.title)
     cache_file = open(os.path.join(question.title, 'cache'), 'a')
+    print("consinder {} of {} answers have been saved.".format(
+        len(answer_cache), question.answer_count))
     for answer in question.answers:
         if answer.id in answer_cache:
             print("%s's answer has been saved." % answer.author.name)
@@ -36,8 +39,8 @@ def main(question_id):
         cache_file.write("%s\n" % answer.id)
         cache_file.flush()
         answer_cache.add(answer.id)
-        # sleep_time = random.randint(1, 3)
-        time.sleep(1)
+        sleep_time = random.randint(1, 3)
+        time.sleep(sleep_time)
     cache_file.close()
 
 

@@ -1,13 +1,13 @@
 from __future__ import print_function
 from zhihu_oauth import ZhihuClient
 import sys
-import time
-import random
 
 
 def save_answer(url):
     answer = client.from_url(url)
-    filename = "%s_%s_voteup%s" % (answer.author.name, answer.id, answer.voteup_count)
+    filename = "%s_%s_voteup%s" % (answer.author.name,
+                                   answer.id,
+                                   answer.voteup_count)
     answer.save(answer.question.title, filename)
 
 
@@ -29,7 +29,7 @@ def main(url):
 if __name__ == '__main__':
     client = ZhihuClient()
     client.load_token('token.pkl')
-    if len(sys.argv)<2:
+    if len(sys.argv) < 2:
         print("python save_by_question.py answer_url")
         sys.exit(-1)
     main(sys.argv[1])

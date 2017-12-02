@@ -5,6 +5,8 @@ import os
 
 
 def convert_file(path, filename):
+    if filename[-5:] != ".html":
+        return
     full_path = os.path.join(path, filename)
     print("file %s is being processed..." % full_path)
     with open(full_path) as f:

@@ -4,7 +4,7 @@ import sys
 import os
 
 
-def convert_file(path, filename):
+def convert_file(filename, path=''):
     if filename[-5:] != ".html":
         return
     full_path = os.path.join(path, filename)
@@ -28,4 +28,4 @@ if __name__ == '__main__':
 
     for root, dirs, filenames in os.walk(param):
         for filename in filenames:
-            convert_file(root, filename)
+            convert_file(filename, path)

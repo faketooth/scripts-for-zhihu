@@ -13,6 +13,7 @@ def get_cache(dir):
         with open(cache_file, 'r') as f:
             lines = f.readlines()
         return set([int(line) for line in lines])
+    os.mkdir(dir)
     return set()
 
 
@@ -30,7 +31,9 @@ def main(question_id):
             time.sleep(1)
             continue
         print(answer.author.name, answer.id, answer.voteup_count)
-        filename = "%s_%s" % (answer.author.name, answer.id)
+        filename = "%s_%s_voteup%s" % (answer.author.name,
+                                       answer.id,
+                                       answer.voteup_count)
         try:
             answer.save(question.title, filename)
         except GetDataErrorException:

@@ -18,6 +18,8 @@ def get_cache(dir):
 
 
 def main(question_id):
+    if question_id[:4] == 'http':
+        question_id = question_id.split("/")[-1]
     question = client.question(int(question_id))
     print("start to save answers of {}".format(question.title.encode('utf-8')))
 

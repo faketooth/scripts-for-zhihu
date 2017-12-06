@@ -14,7 +14,7 @@ def save_answer(url):
 def save_article(url):
     aid = url.split("/")[-1]
     article = client.article(int(aid))
-    article.save()
+    article.save(article.title, "%s_%s" % (article.title, aid))
 
 
 def main(url):

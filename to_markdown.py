@@ -23,7 +23,8 @@ def replace_with_local_picture(mdfile):
             pic_url = line[start+4:end-1]
             pic_filename = "%s_%s" % (pic_prefix, pic_url.split("/")[-1])
             urllib.urlretrieve(pic_url, pic_filename)
-            line = line.replace(pic_url, pic_filename.split("/")[-1])
+            line = line.replace(line[start:end],
+                                "![](%s)\n\n" % pic_filename.split("/")[-1])
         new_lines.append(line)
     with open(mdfile, 'w') as f:
         f.write(''.join(new_lines).encode("utf-8"))

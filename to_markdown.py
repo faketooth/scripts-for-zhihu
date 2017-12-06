@@ -14,6 +14,7 @@ def replace_with_local_picture(mdfile):
     start_tag = re.compile("\!\[\]\(http.*?\)")
     with open(mdfile) as f:
         lines = f.readlines()
+    lines = [line.decode('utf-8') for line in lines]
     new_lines = []
     for line in lines:
         url_pos_pairs = [(m.start(), m.end())
@@ -23,7 +24,7 @@ def replace_with_local_picture(mdfile):
             pic_filename = "%s_%s" % (pic_prefix, pic_url.split("/")[-1])
             urllib.urlretrieve(pic_url, pic_filename)
             line = line.replace(pic_url, pic_filename.split("/")[-1])
-        new_lines.append(line.decode('utf-8'))
+        new_lines.append(line)
     with open(mdfile, 'w') as f:
         f.write(''.join(new_lines).encode("utf-8"))
 

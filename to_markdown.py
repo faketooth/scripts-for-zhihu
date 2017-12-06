@@ -28,4 +28,4 @@ if __name__ == '__main__':
 
     for root, dirs, filenames in os.walk(param):
         for filename in filenames:
-            convert_file(filename, path)
+            convert_file(filename, root)

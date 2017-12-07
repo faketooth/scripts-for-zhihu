@@ -3,7 +3,6 @@ from zhihu_oauth import ZhihuClient
 from zhihu_oauth.exception import GetDataErrorException
 import sys
 import time
-import random
 import os
 
 
@@ -44,8 +43,7 @@ def main(question_id):
         cache_file.write("%s\n" % answer.id)
         cache_file.flush()
         answer_cache.add(answer.id)
-        sleep_time = random.randint(1, 3)
-        time.sleep(sleep_time)
+        time.sleep(1)
     cache_file.close()
 
 

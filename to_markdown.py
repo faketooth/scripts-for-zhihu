@@ -4,12 +4,19 @@ import sys
 import os
 import re
 import urllib
+import traceback
 
 
 def replace_with_local_picture(mdfile):
-    pic_prefix = mdfile.split(".")[0]
-    filename = pic_prefix.split("/")[-1]
-    answer_id = mdfile.split("_")[1]
+    try:
+        pic_prefix = mdfile.split(".")[0]
+        filename = pic_prefix.split("/")[-1]
+        answer_id = mdfile.split("_")[1]
+    except Exception, msg:
+        print("Failed to process %s with error msg: %s" % (mdfile, msg))
+        failed_file_list.append(mdfile)
+        traceback.print_exc()
+        return
     pic_prefix = pic_prefix.replace(filename, answer_id)
     start_tag = re.compile("\!\[\]\(http.*?\)")
     with open(mdfile) as f:
@@ -58,7 +65,9 @@ if __name__ == '__main__':
     if os.path.isfile(param):
         convert_file(param)
         sys.exit(0)
-
+    failed_file_list = []
     for root, dirs, filenames in os.walk(param):
         for filename in filenames:
             convert_file(filename, root)
+    print("\n\nAll files below failed to download pictures.")
+    print("\n".join(failed_file_list))

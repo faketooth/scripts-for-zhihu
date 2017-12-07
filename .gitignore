@@ -104,3 +104,7 @@ ENV/
 token.pkl
 *.html
 */cache
+*/*.md
+*/*.jpg
+*/*.png
+*/*.pdf

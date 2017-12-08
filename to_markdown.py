@@ -9,7 +9,7 @@ import traceback
 
 def replace_with_local_picture(mdfile):
     try:
-        pic_prefix = mdfile.split(".")[0]
+        pic_prefix = mdfile[:-3]
         filename = pic_prefix.split("/")[-1]
         answer_id = mdfile.split("_")[1]
     except Exception, msg:
@@ -46,7 +46,7 @@ def convert_file(filename, path=''):
         lines = f.readlines()
     markdown = html2text.html2text(''.join(lines).decode('utf-8'))
 
-    md_filename = "%s.md" % full_path.split(".")[0].decode('utf-8')
+    md_filename = "%s.md" % full_path[:-5].decode('utf-8')
     with open(md_filename, 'w') as f:
         f.write(markdown.encode('utf-8'))
 
@@ -69,5 +69,6 @@ if __name__ == '__main__':
     for root, dirs, filenames in os.walk(param):
         for filename in filenames:
             convert_file(filename, root)
-    print("\n\nAll files below failed to download pictures.")
-    print("\n".join(failed_file_list))
+    if len(failed_file_list) != 0:
+        print("\n\nAll files below failed to download pictures.")
+        print("\n".join(failed_file_list))

@@ -1,6 +1,8 @@
 from __future__ import print_function
 from zhihu_oauth import ZhihuClient
 import sys
+import os
+import json
 
 
 def save_answer(url):
@@ -9,6 +11,22 @@ def save_answer(url):
                                    answer.id,
                                    answer.voteup_count)
     answer.save(answer.question.title, filename)
+    comments_file = open(os.path.join(answer.question.title,
+                                      filename)+".comments", 'w')
+    keys = "author_info,reply_info,content,created_time,vote_count"
+    keys = keys.split(',')
+    for comment in answer.comments:
+        author_info = "%s_%s" % (comment.author.name, comment.author._id)
+        if comment.reply_to:
+            reply_info = "%s_%s" % (comment.reply_to.name,
+                                    comment.reply_to._id)
+        else:
+            reply_info = "%s_%s" % (None, None)
+        r = [author_info, reply_info, comment.content,
+             comment.created_time,
+             comment.vote_count]
+        comments_file.write("%s\n" % json.dumps(dict(zip(keys, r))))
+    comments_file.close()
 
 
 def save_article(url):

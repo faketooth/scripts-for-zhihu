@@ -50,6 +50,9 @@ def convert_file(filename, path=''):
     markdown = html2text.html2text(''.join(lines).decode('utf-8'))
 
     md_filename = "%s.md" % full_path[:-5].decode('utf-8')
+    if os.path.exists(md_filename):
+        print("%s has been converted to markdown file. Skip it." % filename)
+        return
     with open(md_filename, 'w') as f:
         f.write(markdown.encode('utf-8'))
 

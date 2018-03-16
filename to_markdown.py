@@ -3,7 +3,7 @@ import html2text
 import sys
 import os
 import re
-import urllib
+import urllib.request
 import traceback
 
 
@@ -12,7 +12,7 @@ def replace_with_local_picture(mdfile):
         pic_prefix = mdfile[:-3]
         filename = pic_prefix.split("/")[-1]
         answer_id = mdfile.split("_")[1]
-    except Exception, msg:
+    except Exception:
         print("Failed to process %s with error msg: %s" % (mdfile, msg))
         failed_file_list.append(mdfile)
         traceback.print_exc()
@@ -21,7 +21,7 @@ def replace_with_local_picture(mdfile):
     start_tag = re.compile("\!\[\]\(http.*?\)")
     with open(mdfile) as f:
         lines = f.readlines()
-    lines = [line.decode('utf-8') for line in lines]
+    lines = [line for line in lines]
     new_lines = []
     for line in lines:
         while 1:
@@ -32,12 +32,17 @@ def replace_with_local_picture(mdfile):
             start, end = url_pos_pairs[0]
             pic_url = line[start+4:end-1]
             pic_filename = "%s_%s" % (pic_prefix, pic_url.split("/")[-1])
-            urllib.urlretrieve(pic_url, pic_filename)
+            try:
+                urllib.request.urlretrieve(pic_url, pic_filename)
+            except Exception as e:
+                print(e)
+                print(pic_url)
+                break
             line = line.replace(line[start:end],
                                 "![](%s)" % pic_filename.split("/")[-1])
         new_lines.append(line)
     with open(mdfile, 'w') as f:
-        f.write(''.join(new_lines).encode("utf-8"))
+        f.write(''.join(new_lines))
 
 
 def convert_file(filename, path=''):
@@ -47,14 +52,16 @@ def convert_file(filename, path=''):
     print("file %s is being processed..." % full_path)
     with open(full_path) as f:
         lines = f.readlines()
-    markdown = html2text.html2text(''.join(lines).decode('utf-8'))
+    markdown = html2text.html2text(''.join(lines))
 
-    md_filename = "%s.md" % full_path[:-5].decode('utf-8')
+    md_filename = "%s.md" % full_path[:-5]
     if os.path.exists(md_filename):
         print("%s has been converted to markdown file. Skip it." % filename)
+        if download_picture:
+            replace_with_local_picture(md_filename)
         return
     with open(md_filename, 'w') as f:
-        f.write(markdown.encode('utf-8'))
+        f.write(markdown)
 
     if download_picture:
         replace_with_local_picture(md_filename)

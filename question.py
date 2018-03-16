@@ -20,7 +20,7 @@ def main(question_id):
     if question_id[:4] == 'http':
         question_id = question_id.split("/")[-1]
     question = client.question(int(question_id))
-    print("start to save answers of {}".format(question.title.encode('utf-8')))
+    print("start to save answers of {}".format(question.title))
 
     answer_cache = get_cache(question.title)
     cache_file = open(os.path.join(question.title, 'cache'), 'a')

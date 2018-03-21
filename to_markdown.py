@@ -9,15 +9,15 @@ import traceback
 
 def replace_with_local_picture(mdfile):
     try:
-        pic_prefix = mdfile[:-3]
-        filename = pic_prefix.split("/")[-1]
-        answer_id = mdfile.split("_")[1]
-    except Exception:
-        print("Failed to process %s with error msg: %s" % (mdfile, msg))
+        basename = os.path.basename(mdfile)
+        basedir = os.path.dirname(mdfile)
+        answer_id = basename.split("_")[0]
+        pic_prefix = os.path.join(basedir, answer_id)
+    except Exception as e:
+        print("Failed to process %s with error msg: %s" % (mdfile, e))
         failed_file_list.append(mdfile)
         traceback.print_exc()
         return
-    pic_prefix = pic_prefix.replace(filename, answer_id)
     start_tag = re.compile("\!\[\]\(http.*?\)")
     with open(mdfile) as f:
         lines = f.readlines()
@@ -35,8 +35,7 @@ def replace_with_local_picture(mdfile):
             try:
                 urllib.request.urlretrieve(pic_url, pic_filename)
             except Exception as e:
-                print(e)
-                print(pic_url)
+                print(e, pic_url)
                 break
             line = line.replace(line[start:end],
                                 "![](%s)" % pic_filename.split("/")[-1])
